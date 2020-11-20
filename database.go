@@ -12,7 +12,9 @@ type Requester struct {
 }
 
 func (r *Requester) Load(name string) error {
+	// Opening file
 	file, err := syscall.Open(name, syscall.O_CREAT | syscall.O_RDONLY | syscall.O_CLOEXEC, 1<<32-1)
+	
 	if err != nil {
 		return err
 	}
@@ -21,6 +23,7 @@ func (r *Requester) Load(name string) error {
 	size := stat.Size()
 
 	buff := make([]byte, 1)
+	
 	for ; ; {
 		syscall.Read(file, buff)
 		if buff[0] == 0 {
@@ -36,6 +39,7 @@ func (r *Requester) Save(name string) error {
 	syscall.DeleteFile(path)
 
 	file, err := syscall.Open(name, syscall.O_CREAT | syscall.O_WRONLY | syscall.O_CLOEXEC, 1<<32-1)
+	
 	if err != nil {
 		return err
 	}
